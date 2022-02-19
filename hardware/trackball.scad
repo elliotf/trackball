@@ -81,7 +81,7 @@ button_params = [
 ];
 
 ////////////////////////////////////////////////////////////////
-// Below this line, things get complicated. 
+// Below this line, things get complicated.
 
 minimal_body_height=1;
 minimal_body_diameter=67;
@@ -94,10 +94,10 @@ bottom_clearance=4;
 hole_diameter=ball_diameter - 25;
 
 bearing_angle=60;
-bearing_spacing=[ 
+bearing_spacing=[
     [0, 0, 0],
     [0, 0, 120],
-    [0, 0, -120] 
+    [0, 0, -120]
 ];
 
 sensor_angle=60;
@@ -106,7 +106,7 @@ sensor_clearance=2;
 lens_thickness=3.3;
 sensor_board_thickness=2;
 sensor_board_clearance=0;
-        
+
 
 // Give the ball clearance all the way around in the recess
 ball_radius=ball_diameter/2;
@@ -122,7 +122,7 @@ module button_transform(params)
     translate([0, ball_radius + params[2], 0])
     rotate(-[params[3], 0, 0])
     rotate([0, params[4], 0])
-    rotate([0, 0, params[5]]) 
+    rotate([0, 0, params[5]])
     children();
 }
 
@@ -174,7 +174,7 @@ module shadow_hull(extra_height = 0)
         children();
 
         // the projection of the child object
-        translate([0, 0, bottom - 1 - extra_height]) 
+        translate([0, 0, bottom - 1 - extra_height])
         linear_extrude(height=1)
         projection()
         children();
@@ -233,7 +233,7 @@ module bearing_cutouts()
 
 module button_cutout(front_overhang = 0, rear_overhang = 0)
 {
-    union() 
+    union()
     {
         translate([0, 0, -10])
         {
@@ -252,7 +252,7 @@ module button_cutout(front_overhang = 0, rear_overhang = 0)
             ccube(16, 16, 20);
         }
 
-        // Front and rear overhangs are intended to match up with the overhang parameters in 
+        // Front and rear overhangs are intended to match up with the overhang parameters in
         // microswitch-cherry-mx.scad.
         if (front_overhang > 0)
         {
@@ -315,9 +315,9 @@ module sensor_cutout(params)
     {
         union()
         {
-            // origin of the sensor is at the surface of the lens, 
+            // origin of the sensor is at the surface of the lens,
             // with the lens facing towards +z, and the "top" of the sensor (where the wires exit) towards +y
-        
+
             // window portion of lens is roughly 11x9mm. This will make a window.
             color("white", 0.25)
             hull()
@@ -328,7 +328,7 @@ module sensor_cutout(params)
                 scale([1, 0.5, 1])
                 cylinder(d=11, h=6);
             }
-                        
+
             // Lens portion of sensor is 22 x 20 mm, centered on the board
             color("gray", 0.5)
             intersection()
@@ -337,7 +337,7 @@ module sensor_cutout(params)
                 translate([0, 0, -(lens_thickness + 2)])
                 cylinder(d=adns9800_board_radius, h=lens_thickness + 3, $fa=5);
             }
-        
+
             // the board is a 32mm circle, ~2mm thick.
             // Add some thickness to the back to leave room for components, etc.
             z = sensor_board_thickness + sensor_board_clearance;
@@ -345,18 +345,18 @@ module sensor_cutout(params)
             {
                 // The board itself
                 color("green", 0.5) cylinder(d=adns9800_board_radius, h=z, $fa = 5);
-                
+
                 // Hemisphere for clearance
                 difference()
                 {
                     color("white", 0.25)
                     sphere(d=adns9800_board_radius, $fa = 5);
-                    
+
                     translate([0,0,1])
                     cylinder(d=adns9800_board_radius, h=17, $fa=5);
                 }
             }
-            
+
             // The screws are 27mm apart, on the centerline of the board.
             screw_distance=27;
             for(i = [ screw_distance/2,
@@ -371,9 +371,9 @@ module sensor_cutout(params)
     {
         union()
         {
-            // origin of the sensor is at the surface of the lens, 
+            // origin of the sensor is at the surface of the lens,
             // with the lens facing towards +z, and the "top" of the sensor (where the wires exit) towards +y
-        
+
             // window portion of lens is roughly 11x9mm. This will make a window.
             color("white", 0.25)
             hull()
@@ -384,7 +384,7 @@ module sensor_cutout(params)
                 scale([1, 0.5, 1])
                 cylinder(d=11, h=6);
             }
-            
+
             // Lens portion of sensor is 21.2 x 19 mm
             color("gray", 0.5)
             intersection()
@@ -392,7 +392,7 @@ module sensor_cutout(params)
                 rcube(22, 20, -(lens_thickness + 1), pmw3360_lens_radius);
                 // translate([0, 0, -(lens_thickness + 2)])
                 // cylinder(d=32, h=lens_thickness + 3, $fa=5);
-                
+
             }
 
             // The board is shifted slightly relative to the lens
@@ -429,20 +429,20 @@ module sensor_cutout(params)
                         translate([0, pmw3360_board_height/2, z])
                         scale([1, pmn3360_curved_top_scale, 1])
                         cylinder(d=pmw3360_board_width, h=0.1);
-                        
+
                         // backside clearance (half cylinder)
                         difference()
                         {
                             color("white", 0.25)
                             rotate([0, 90, 0])
                             cylinder(center = true, d=pmw3360_board_height, h=pmw3360_board_width, $fa = 5);
-                            
+
                             translate([0,0,1])
                             ccube(pmw3360_board_width + 2, pmw3360_board_height + 2, 17);
                         }
                     }
                 }
-                
+
                 // The screws are 24mm apart, on the centerline of the board.
                 screw_distance=24;
                 for(i = [ screw_distance/2,
@@ -468,12 +468,12 @@ module sensor_access_base(params)
         {
             // The board itself
             cylinder(d=adns9800_board_radius, h=z, $fa = 5);
-            
+
             // Hemisphere for clearance
             difference()
             {
                 sphere(d=adns9800_board_radius, $fa = 5);
-                
+
                 translate([0,0,1])
                 cylinder(d=adns9800_board_radius, h=17, $fa=5);
             }
@@ -491,7 +491,7 @@ module sensor_access_base(params)
             {
                 // The board itself
                 color("green", 0.5) ccube(pmw3360_board_width, pmw3360_board_height, z);
-                
+
                 hull()
                 {
                     // Curved cut above the board to reduce bridging
@@ -506,7 +506,7 @@ module sensor_access_base(params)
                         color("white", 0.25)
                         rotate([0, 90, 0])
                         cylinder(center = true, d=pmw3360_board_height, h=pmw3360_board_width, $fa = 5);
-                        
+
                         translate([0,0,1])
                         ccube(pmw3360_board_width + 2, pmw3360_board_height + 2, 17);
                     }
@@ -557,7 +557,7 @@ module sensor_shell(params)
 module sensorpod(params)
 {
     rotate([sensor_angle, 0, 0])
-    translate([0, 0, -(lens_thickness + ball_radius + sensor_clearance)]) 
+    translate([0, 0, -(lens_thickness + ball_radius + sensor_clearance)])
     {
         rotate([sensor_skew_angle, 0, 0])
         {
@@ -566,8 +566,8 @@ module sensorpod(params)
                 difference()
                 {
                     cylinder(d=adns9800_board_radius, h=lens_thickness);
-                    
-                    translate([-17, 2, 0]) 
+
+                    translate([-17, 2, 0])
                     cube([adns9800_board_radius + 2, 20, lens_thickness]);
                 }
             }
@@ -666,7 +666,7 @@ module body_left_cut()
                     // fillet
                     fillet_amount = 20;
                     // Added $fn=128 to make the left cut high-res
-                    offset(-fillet_amount, $fn=128) 
+                    offset(-fillet_amount, $fn=128)
                     offset(fillet_amount)
                     translate([radius, ledge_height])
                     rotate([0, 0, -downward_curve])
@@ -691,14 +691,14 @@ module body_left_cut()
                     }
 
                     // offset(fillet_amount)
-                    // offset(-fillet_amount) 
+                    // offset(-fillet_amount)
                     // square([50, 50]);
                 }
                 // Clip to positive X
                 translate([0, -150])
                 square(300, 300);
             }
-        }  
+        }
         // Don't cut anything aft of tail_y_boundary with this shape.
         // translate([-100, -200 + tail_y_boundary, -100])
         // cube([200, 200, 200]);
@@ -743,8 +743,8 @@ module body_right_rear_cut(params)
     {
         rotate_extrude()
         intersection()
-        {  
-            offset(-params[6]) 
+        {
+            offset(-params[6])
             offset(params[6])
             union()
             {
@@ -762,7 +762,7 @@ module body_right_rear_cut(params)
             translate([0, -150])
             square(300, 300);
         }
-        
+
         // Don't clip forward of this part
         translate([-200, 0, -200])
         cube([400, 400, 400]);
@@ -859,11 +859,11 @@ module body_unclipped(include_button_supports = true)
             {
                 // left cut
                 body_left_cut();
-                        
+
                 // right cut
                 body_right_cut();
-            }        
- 
+            }
+
             if (include_button_supports)
             {
                 body_button_supports();
@@ -1011,17 +1011,17 @@ module body_minimal()
                     // Footprint outline
                     translate ([0, 0, -(recess_radius + bottom_clearance)])
                     cylinder(h=minimal_body_height, d=minimal_body_diameter);
-                    
+
                     // Pods for each of three support bearings
                     for(i = bearing_spacing )
                     {
-                        rotate(i) 
+                        rotate(i)
                         rotate([bearing_angle, 0, 0])
-                        translate([0, 0, -(ball_radius + (bearing_diameter/2))]) 
+                        translate([0, 0, -(ball_radius + (bearing_diameter/2))])
                         scale([1, 1, 0.5])
                         sphere(r=5);
                     }
-                            
+
                     // Pods for two sensors
                     for(i = sensor_params )
                     {
@@ -1131,7 +1131,7 @@ module sensor_transform(params)
 {
     rotate([0, 0, params[0]])
     rotate([sensor_angle, 0, 0])
-    translate([0, 0, -(ball_radius + sensor_clearance)]) 
+    translate([0, 0, -(ball_radius + sensor_clearance)])
     rotate([sensor_skew_angle, 0, 0])
     children();
 }
@@ -1144,7 +1144,7 @@ module sensor_cutouts()
         {
             sensor_transform(params)
             sensor_cutout(params);
-            
+
             // // Clip the cutouts to the top of the base ring.
             // translate([0, 0, minimal_body_height + bottom])
             // ccube(100, 100, -100);
@@ -1204,7 +1204,7 @@ $fa = 1;
 
 module full()
 {
-    intersection() 
+    intersection()
     {
         difference()
         {
